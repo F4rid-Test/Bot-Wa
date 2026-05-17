@@ -1,3 +1,6 @@
-## Dikembangkan oleh AI :v
+## Bot WhatsApp (tes)
+Tujuanku ingin membuat Bot WhatsApp yang mempunyai banyak tools
 
-Sumber: https://github.com/RIFKIror/simple-baseV2
+> SC ini dikembangkan oleh AI :v
+
+# Sumber: https://github.com/RIFKIror/simple-baseV2
