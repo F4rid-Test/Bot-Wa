@@ -126,6 +126,14 @@ const connectToWhatsApp = async () => {
 
   if (!isCommand) continue
 
+  // Private mode: hanya owner yang bisa pakai
+  if (!global.isPublic && !m.isOwner) {
+    await sock.sendMessage(m.chat, {
+      text: '🔴 Bot sedang dalam mode *PRIVATE*.\nHanya owner yang bisa menggunakan bot saat ini.'
+    }, { quoted: m })
+    break
+  }
+
   try {
 
     await plugin(sock, m, {
