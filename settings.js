@@ -9,3 +9,4 @@ global.footer = '© Created by Kino'
 global.sessionName = 'session'
 global.thumb = 'https://i.ibb.co.com/dJVD0FmV/IMG-20260513-063210.jpg'
 global.customPairing = 'WIRELESS' // Custom pairing code, minimal 8 karakter
+global.isPublic = true // true = semua user bisa pakai bot, false = owner only
