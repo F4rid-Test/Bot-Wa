@@ -1,76 +1,56 @@
+const TAG_DETAILS = {
+  download: { icon: '📥', title: 'DOWNLOADER' },
+  ai: { icon: '🧠', title: 'AI' },
+  search: { icon: '🔍', title: 'SEARCH' },
+  tools: { icon: '🛠️', title: 'TOOLS' },
+  group: { icon: '👥', title: 'GROUP' },
+  stalker: { icon: '🕵️', title: 'STALKER' },
+  owner: { icon: '⚙️', title: 'OWNER' },
+  main: { icon: '🏠', title: 'MAIN' }
+}
+
 let handler = async (conn, m, { prefix }) => {
   const p = prefix
-  const text = `
-*${global.nameBot} — All Menu*
 
-Selamat datang di bot ${global.nameBot}.
-Berikut daftar fitur yang tersedia dan dapat digunakan.
+  // Collect plugins and group by tag
+  const categories = {}
+  Object.values(global.plugins).forEach(plugin => {
+    if (!plugin || !plugin.tag) return
+    const tags = Array.isArray(plugin.tag) ? plugin.tag : [plugin.tag]
+    tags.forEach(tag => {
+      if (!categories[tag]) categories[tag] = []
+      categories[tag].push(plugin)
+    })
+  })
 
-━━━━━━━━━━━━━━━
-*MENU DOWNLOADER*
+  let menuText = `*${global.nameBot} — All Menu*\n\n`
+  menuText += `Selamat datang di bot ${global.nameBot}.\n`
+  menuText += `Berikut daftar fitur yang tersedia dan dapat digunakan.\n`
 
-• ${p}mf <link_mediafire>
-• ${p}tt <link_tiktok>
+  const sortedTags = Object.keys(categories).sort()
 
-━━━━━━━━━━━━━━━
-*MENU AI*
+  sortedTags.forEach(tag => {
+    const details = TAG_DETAILS[tag] || { icon: '🔖', title: tag.toUpperCase() }
+    menuText += `\n━━━━━━━━━━━━━━━\n`
+    menuText += `*MENU ${details.title}*\n\n`
 
-• ${p}gpt <text>
-• ${p}claude <text>
-• ${p}qwen-tts <text> <model>
+    categories[tag].forEach(plugin => {
+      const help = Array.isArray(plugin.help) ? plugin.help : [plugin.help]
+      help.forEach(h => {
+        menuText += `• ${p}${h}\n`
+      })
+    })
+  })
 
-━━━━━━━━━━━━━━━
-*MENU GROUP*
-
-• ${p}gc <open/close>
-• ${p}pin <1/2/3> <reply pesan>
-• ${p}unpin <reply pesan yang disematkan>
-• ${p}kick <tag/reply/nomor>
-• ${p}add <nomor>
-• ${p}promote <tag/reply>
-• ${p}demote <tag/reply>
-• ${p}ht <teks>
-• ${p}tagall <teks opsional>
-
-━━━━━━━━━━━━━━━
-*MENU TOOLS*
-
-• ${p}tourl <reply gambar>
-• ${p}rvo <reply pesan sekali lihat>
-• ${p}ytplay <judul/link youtube>
-• ${p}swytplay <judul/link youtube>
-
-━━━━━━━━━━━━━━━
-*MENU SEARCH*
-
-• ${p}wiki <query>
-• ${p}movie <query>
-• ${p}pinsrch <query>
-
-━━━━━━━━━━━━━━━
-*MENU STALKER*
-
-• ${p}ghstalk <username>
-• ${p}ttstalk <username>
-
-━━━━━━━━━━━━━━━
-*MENU OWNER*
-
-• ${p}> <kode javascript>
-• ${p}plugin <reply code> <path>
-• ${p}listplugin
-• ${p}delplugin <path>
-• ${p}getplugin <path>
-
-━━━━━━━━━━━━━━━
-© ${global.nameBot}`.trim()
+  menuText += `\n━━━━━━━━━━━━━━━\n`
+  menuText += `© ${global.nameBot}`
 
   await conn.sendMessage(m.chat,
     {
       image: {
         url: global.thumb
       },
-      caption: text,
+      caption: menuText.trim(),
       footer: global.nameBot,
       buttons: [
         {
